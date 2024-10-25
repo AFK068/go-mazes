@@ -1,32 +1,29 @@
 package infrastructure
 
-/*
-func PrintMaze(mz *domain.Maze) {
-	for j := 0; j < mz.GetCols()+2; j++ {
-		fmt.Print(string("_"))
+import (
+	"fmt"
+	"time"
+
+	"github.com/es-debug/backend-academy-2024-go-template/internal/domain"
+)
+
+func DrawMaze(mz *domain.Maze, delay time.Duration) {
+	mazeGenerationStep := *mz.GetMazeGenerationStep()
+	for i := 0; i < len(mazeGenerationStep); i++ {
+		printGrid(&mazeGenerationStep[i])
+		time.Sleep(delay)
+		fmt.Print("\033[H\033[2J")
 	}
-	println()
 
 	grid := mz.GetGrid()
-	for i := 0; i < len(grid); i++ {
-		fmt.Print(string("|"))
-		for j := 0; j < len(grid[i]); j++ {
-			fmt.Print(string(grid[i][j]))
-		}
+	printGrid(&grid)
+}
 
+func printGrid(grid *domain.Grid) {
+	for i := 0; i < len(*grid); i++ {
+		for j := 0; j < len((*grid)[i]); j++ {
+			fmt.Print(string((*grid)[i][j]))
+		}
 		fmt.Println()
 	}
 }
-
-func Draw(mz *domain.Maze, delay time.Duration) {
-	grid := mz.GetGrid()
-	for i := 0; i < mz.GetRows(); i++ {
-		for j := 0; j < mz.GetCols(); j++ {
-			fmt.Print(string(grid[i][j]))
-		}
-		fmt.Println()
-	}
-	time.Sleep(delay)
-	fmt.Print("\033[H\033[2J")
-}
-*/
