@@ -102,8 +102,6 @@ func (m *Menu) Display() (int, error) {
 	}
 }
 
-// getInput will read raw input from the terminal
-// It returns the raw ASCII value inputted
 func getInput() (byte, error) {
 	t, err := term.Open("/dev/tty")
 	if err != nil {

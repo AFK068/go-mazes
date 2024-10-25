@@ -8,4 +8,4 @@ require (
 	golang.org/x/exp v0.0.0-20241004190924-225e2abe05e6
 )
 
-require golang.org/x/sys v0.0.0-20210331175145-43e1dd70ce54 // indirect
+require golang.org/x/sys v0.26.0 // indirect

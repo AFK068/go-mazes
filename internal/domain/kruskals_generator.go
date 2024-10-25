@@ -8,9 +8,8 @@ import (
 
 type KruskalGenerator struct{}
 
-func (g *KruskalGenerator) Generate(maze *Maze) *Maze {
+func (g *KruskalGenerator) Generate(maze *Maze, startCell, endCell *Cell) *Maze {
 	rand.Seed(uint64(time.Now().UnixNano()))
-
 	nodes := make([]*Cell, 0)
 	for i := 0; i < maze.GetRows(); i += 2 {
 		for j := 0; j < maze.GetCols(); j += 2 {
@@ -62,7 +61,7 @@ func (g *KruskalGenerator) Generate(maze *Maze) *Maze {
 			maze.SetGrid(firstRow, firstCol, End)
 			maze.SetGrid(secondRow, secondCol, End)
 			maze.SetGrid(midRow, midCol, End)
-			maze.Draw(10 * time.Millisecond) // Generate animation
+			maze.generateSteps = append(maze.generateSteps, maze.CopyGrid()) // Generate animation
 			maze.SetGrid(firstRow, firstCol, Floor)
 			maze.SetGrid(secondRow, secondCol, Floor)
 			maze.SetGrid(midRow, midCol, Floor)
@@ -71,9 +70,31 @@ func (g *KruskalGenerator) Generate(maze *Maze) *Maze {
 		}
 	}
 
-	maze.SetGrid(0, 0, Start)
-	maze.SetGrid(maze.GetRows()-1, maze.GetCols()-1, End)
-	maze.Draw(10 * time.Millisecond) // Generate animation
-
+	maze.SetStart(startCell)
+	maze.SetEnd(endCell)
+	maze.generateSteps = append(maze.generateSteps, maze.CopyGrid()) // Generate animation
 	return maze
+}
+
+func Find(sets []*UnionFindSet, x int) int {
+	if sets[x].parent != x {
+		sets[x].parent = Find(sets, sets[x].parent)
+	}
+	return sets[x].parent
+}
+
+func Join(sets []*UnionFindSet, x, y int) {
+	rootX := Find(sets, x)
+	rootY := Find(sets, y)
+
+	if rootX != rootY {
+		if sets[rootX].rank > sets[rootY].rank {
+			sets[rootY].parent = rootX
+		} else if sets[rootX].rank < sets[rootY].rank {
+			sets[rootX].parent = rootY
+		} else {
+			sets[rootY].parent = rootX
+			sets[rootX].rank++
+		}
+	}
 }

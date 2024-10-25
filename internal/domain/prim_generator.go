@@ -8,15 +8,21 @@ import (
 
 type PrimGenerator struct{}
 
-func (g *PrimGenerator) Generate(maze *Maze) *Maze {
+func (g *PrimGenerator) Generate(maze *Maze, startCell, endCell *Cell) *Maze {
 	rand.Seed(uint64(time.Now().UnixNano()))
 
-	start := NewCell(0, 0, nil)
-	maze.SetGrid(start.GetRow(), start.GetCol(), Start)
+	maze.SetStart(startCell)
 
-	frontier := []*Cell{
-		NewCell(1, 0, start),
-		NewCell(0, 1, start),
+	frontier := []*Cell{}
+	if startCell.GetRow()+1 < maze.GetRows() {
+		frontier = append(frontier, NewCell(startCell.GetRow()+1, startCell.GetCol(), startCell))
+	} else if startCell.GetRow()-1 >= 0 {
+		frontier = append(frontier, NewCell(startCell.GetRow()-1, startCell.GetCol(), startCell))
+	}
+	if startCell.GetCol()+1 < maze.GetCols() {
+		frontier = append(frontier, NewCell(startCell.GetRow(), startCell.GetCol()+1, startCell))
+	} else if startCell.GetCol()-1 >= 0 {
+		frontier = append(frontier, NewCell(startCell.GetRow(), startCell.GetCol()-1, startCell))
 	}
 
 	var child *Cell
@@ -31,7 +37,7 @@ func (g *PrimGenerator) Generate(maze *Maze) *Maze {
 		row := parent.GetRow()
 		col := parent.GetCol()
 
-		if (maze.IsValid(row, col)) && (maze.GetGrid()[row][col] == Wall) {
+		if maze.IsValid(row, col) && maze.GetGrid()[row][col] == Wall {
 			maze.SetGrid(child.GetRow(), child.GetCol(), Floor)
 			maze.SetGrid(row, col, End)
 
@@ -41,11 +47,10 @@ func (g *PrimGenerator) Generate(maze *Maze) *Maze {
 			maze.SetGrid(row, col, Floor)
 		}
 
-		maze.Draw(10 * time.Millisecond) // Generate animation
-		// Draw(maze, 10*time.Millisecond) // Generate animation
+		maze.generateSteps = append(maze.generateSteps, maze.CopyGrid()) // Generate animation
 	}
 
-	maze.SetGrid(maze.GetRows()-1, maze.GetCols()-1, End)
+	maze.SetEnd(endCell)
 
 	return maze
 }
