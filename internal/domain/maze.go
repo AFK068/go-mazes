@@ -3,11 +3,12 @@ package domain
 type Grid [][]rune
 
 const (
-	Wall  rune = '⬛'
-	Path  rune = '🟪'
-	Floor rune = '⬜'
-	Start rune = '🟦'
-	End   rune = '🟥'
+	Wall     rune = '⬛'
+	MainPath rune = '🟧'
+	Path     rune = '🟪'
+	Floor    rune = '⬜'
+	Start    rune = '🟦'
+	End      rune = '🟥'
 )
 
 type Maze struct {
