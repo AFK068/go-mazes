@@ -45,9 +45,10 @@ func selectSolver() (domain.Solver, error) {
 	solvers := []domain.Solver{
 		&domain.DFSSolver{},
 		&domain.BFSSolver{},
+		&domain.WallFollowerSolver{},
 	}
 
-	selectedIndex, err := displayMenu("Select maze solving algorithm", []string{"Depth-first search", "Breadth-first search"})
+	selectedIndex, err := displayMenu("Select maze solving algorithm", []string{"Depth-first search", "Breadth-first search", "Wall follower"})
 	if err != nil {
 		return nil, fmt.Errorf("selecting solver: %w", err)
 	}

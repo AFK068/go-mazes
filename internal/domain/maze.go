@@ -5,6 +5,7 @@ type Grid [][]rune
 const (
 	Wall     rune = '⬛'
 	MainPath rune = '🟧'
+	Visited  rune = '🟩'
 	Path     rune = '🟪'
 	Floor    rune = '⬜'
 	Start    rune = '🟦'
@@ -86,7 +87,9 @@ func (mz *Maze) GetIndex(cell *Cell) int {
 }
 
 func (mz *Maze) SetGrid(r, w int, val rune) {
-	mz.grid[r][w] = val
+	if mz.IsValid(r, w) {
+		mz.grid[r][w] = val
+	}
 }
 
 func (mz *Maze) SetStart(cell *Cell) {
