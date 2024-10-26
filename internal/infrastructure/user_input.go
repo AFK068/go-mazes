@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func GetWidthAndHeightFromUser() (int, int, error) {
+func GetAndRoundWidthAndHeightFromUser() (int, int, error) {
 	reader := bufio.NewReader(os.Stdin)
 	var width, height int
 
@@ -54,7 +54,7 @@ func GetCoordinatesFromUser(maxValueX, maxValueY int) (int, int, error) {
 	var x, y int
 
 	for {
-		fmt.Printf("Enter the x coordinate (in the range from 0 to %d): ", maxValueX-1)
+		fmt.Printf("Enter the x coordinate (in the range from 1 to %d): ", maxValueX)
 		xStr, err := reader.ReadString('\n')
 		if err != nil {
 			return 0, 0, fmt.Errorf("reading width: %w", err)
@@ -64,14 +64,14 @@ func GetCoordinatesFromUser(maxValueX, maxValueY int) (int, int, error) {
 		if err != nil {
 			return 0, 0, fmt.Errorf("converting width to int: %w", err)
 		}
-		if x >= 0 && x < maxValueX {
+		if x >= 1 && x <= maxValueX {
 			break
 		}
-		fmt.Printf("Invalid x coordinate value. Please enter an integer between 0 and %d", maxValueX-1)
+		fmt.Printf("Invalid x coordinate value. Please enter an integer between 0 and %d", maxValueX)
 	}
 
 	for {
-		fmt.Printf("Enter the y coordinate (in the range from 0 to %d): ", maxValueY-1)
+		fmt.Printf("Enter the y coordinate (in the range from 1 to %d): ", maxValueY)
 		yStr, err := reader.ReadString('\n')
 		if err != nil {
 			return 0, 0, fmt.Errorf("reading height: %w", err)
@@ -81,10 +81,10 @@ func GetCoordinatesFromUser(maxValueX, maxValueY int) (int, int, error) {
 		if err != nil {
 			return 0, 0, fmt.Errorf("converting height to int: %w", err)
 		}
-		if y >= 0 && y < maxValueY {
+		if y >= 1 && y <= maxValueY {
 			break
 		}
-		fmt.Printf("Invalid y coordinate value. Please enter an integer between 0 and %d", maxValueY-1)
+		fmt.Printf("Invalid y coordinate value. Please enter an integer between 0 and %d", maxValueY)
 	}
 
 	return x, y, nil

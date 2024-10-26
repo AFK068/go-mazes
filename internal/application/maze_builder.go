@@ -2,18 +2,19 @@ package application
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/es-debug/backend-academy-2024-go-template/internal/domain"
 	"github.com/es-debug/backend-academy-2024-go-template/internal/infrastructure"
-	"github.com/es-debug/backend-academy-2024-go-template/pkg"
 )
 
 func InitializeMaze() error {
-	width, height, err := infrastructure.GetWidthAndHeightFromUser()
+	width, height, err := infrastructure.GetAndRoundWidthAndHeightFromUser()
 	if err != nil {
 		return fmt.Errorf("getting width and height: %w", err)
 	}
+
+	width = width - width%2
+	height = height - height%2
 
 	// Controling that size maze is not bigger than console size
 	err = GetConsoleSize(width, height)
@@ -21,46 +22,41 @@ func InitializeMaze() error {
 		return fmt.Errorf("getting console size: %w", err)
 	}
 
-	startX, startY, err := infrastructure.GetCoordinatesFromUser(width, height)
+	startX, startY, err := infrastructure.GetCoordinatesFromUser(width-1, height-1)
 	if err != nil {
 		return fmt.Errorf("getting start coordinates: %w", err)
 	}
 
-	endX, endY, err := infrastructure.GetCoordinatesFromUser(width, height)
+	endX, endY, err := infrastructure.GetCoordinatesFromUser(width-1, height-1)
 	if err != nil {
 		return fmt.Errorf("getting end coordinates: %w", err)
 	}
 
-	startCell := domain.NewCell(startY, startX, nil)
-	endCell := domain.NewCell(endY, endX, nil)
+	startCell := domain.NewCell(startY-1, startX-1, nil)
+	endCell := domain.NewCell(endY-1, endX-1, nil)
 
-	generateMazeKruskal := domain.NewGenerateMaze(&domain.KruskalGenerator{})
-	generateMazePrims := domain.NewGenerateMaze(&domain.PrimGenerator{})
-
-	actionsMaze := []func() domain.Maze{
-		func() domain.Maze {
-			maze := generateMazeKruskal.GenerateMaze(height, width, startCell, endCell)
-			infrastructure.DrawMaze(maze, 10*time.Millisecond)
-			return *maze
-		},
-		func() domain.Maze {
-			maze := generateMazePrims.GenerateMaze(height, width, startCell, endCell)
-			infrastructure.DrawMaze(maze, 10*time.Millisecond)
-			return *maze
-		},
+	generator, err := selectGenerator()
+	if err != nil {
+		return fmt.Errorf("selecting generator: %w", err)
 	}
 
-	menu := pkg.NewMenu("Select algorithm")
-	menu.AddItem("Kruskal's algorithm")
-	menu.AddItem("Prim's algorithm")
+	generateMaze := domain.NewGenerateMaze(generator)
+	maze := generateMaze.GenerateMaze(height, width, startCell, endCell)
+	infrastructure.RenderMazeWithGridStepsWithDelay(maze.GetMazeGenerationStep())
 
-	selectedIndex, _ := menu.Display()
-	if selectedIndex >= 0 && selectedIndex < len(actionsMaze) {
-		actionsMaze[selectedIndex]()
+	solver, err := selectSolver()
+	if err != nil {
+		return fmt.Errorf("selecting solver: %w", err)
+	}
+
+	found, path := solver.Solve(maze)
+	infrastructure.RenderMazeWithGridStepsWithDelay(&path)
+
+	if found {
+		fmt.Println("Path found!")
 	} else {
-		fmt.Println("Invalid selection")
+		fmt.Println("No path found.")
 	}
 
-	fmt.Println(actionsMaze)
 	return nil
 }

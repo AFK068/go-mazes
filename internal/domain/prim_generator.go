@@ -11,19 +11,15 @@ type PrimGenerator struct{}
 func (g *PrimGenerator) Generate(maze *Maze, startCell, endCell *Cell) *Maze {
 	rand.Seed(uint64(time.Now().UnixNano()))
 
-	maze.SetStart(startCell)
+	// Set start cell for generate maze
+	start := NewCell(0, 0, nil)
+	maze.SetGrid(0, 0, Floor)
 
 	frontier := []*Cell{}
-	if startCell.GetRow()+1 < maze.GetRows() {
-		frontier = append(frontier, NewCell(startCell.GetRow()+1, startCell.GetCol(), startCell))
-	} else if startCell.GetRow()-1 >= 0 {
-		frontier = append(frontier, NewCell(startCell.GetRow()-1, startCell.GetCol(), startCell))
-	}
-	if startCell.GetCol()+1 < maze.GetCols() {
-		frontier = append(frontier, NewCell(startCell.GetRow(), startCell.GetCol()+1, startCell))
-	} else if startCell.GetCol()-1 >= 0 {
-		frontier = append(frontier, NewCell(startCell.GetRow(), startCell.GetCol()-1, startCell))
-	}
+
+	// Add the start cells neighbors to the frontier
+	frontier = append(frontier, NewCell(1, 0, start))
+	frontier = append(frontier, NewCell(0, 1, start))
 
 	var child *Cell
 	var parent *Cell
@@ -50,7 +46,10 @@ func (g *PrimGenerator) Generate(maze *Maze, startCell, endCell *Cell) *Maze {
 		maze.generateSteps = append(maze.generateSteps, maze.CopyGrid()) // Generate animation
 	}
 
+	// Set start and end
+	maze.SetStart(startCell)
 	maze.SetEnd(endCell)
+	maze.generateSteps = append(maze.generateSteps, maze.CopyGrid())
 
 	return maze
 }

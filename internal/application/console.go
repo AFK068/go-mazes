@@ -11,6 +11,7 @@ import (
 
 func GetConsoleSize(expectedWidth, expectedHeight int) error {
 	var lastWidth, lastHeight int
+
 	for {
 		cmd := exec.Command("stty", "size")
 		cmd.Stdin = os.Stdin
