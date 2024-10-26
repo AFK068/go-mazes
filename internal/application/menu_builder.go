@@ -44,9 +44,10 @@ func selectGenerator() (domain.Generator, error) {
 func selectSolver() (domain.Solver, error) {
 	solvers := []domain.Solver{
 		&domain.DFSSolver{},
+		&domain.BFSSolver{},
 	}
 
-	selectedIndex, err := displayMenu("Select maze solving algorithm", []string{"Depth-first search"})
+	selectedIndex, err := displayMenu("Select maze solving algorithm", []string{"Depth-first search", "Breadth-first search"})
 	if err != nil {
 		return nil, fmt.Errorf("selecting solver: %w", err)
 	}
