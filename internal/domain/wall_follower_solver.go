@@ -6,7 +6,7 @@ type WallFollowerSolver struct{}
 
 const MaxSteps = 100000
 
-func (solver *WallFollowerSolver) Solve(maze *Maze) (bool, []Grid) {
+func (solver *WallFollowerSolver) Solve(maze *Maze) (bool, []Grid, int) {
 	var path []Grid
 	path = append(path, maze.CopyGrid())
 
@@ -16,12 +16,13 @@ func (solver *WallFollowerSolver) Solve(maze *Maze) (bool, []Grid) {
 
 	visited := make(map[int]bool)
 	visited[maze.GetIndex(current)] = true
+	coinsCollected := 0
 	steps := 0
 
 	for current.GetRow() != maze.GetEnd().GetRow() || current.GetCol() != maze.GetEnd().GetCol() {
 		if steps > MaxSteps {
 			fmt.Println("Exceeded maximum steps, possible infinite loop.")
-			return false, path
+			return false, path, coinsCollected
 		}
 
 		rightDirIndex := (dirIndex + 1) % 4
@@ -42,28 +43,11 @@ func (solver *WallFollowerSolver) Solve(maze *Maze) (bool, []Grid) {
 		case maze.IsValid(rightRow, rightCol) && maze.GetGrid()[rightRow][rightCol] != Wall:
 			dirIndex = rightDirIndex
 			current = NewCell(rightRow, rightCol, current)
-
-			if visited[maze.GetIndex(current)] {
-				maze.SetGrid(current.GetRow(), current.GetCol(), Visited)
-			} else {
-				maze.SetGrid(current.GetRow(), current.GetCol(), Path)
-			}
 		case maze.IsValid(frontRow, frontCol) && maze.GetGrid()[frontRow][frontCol] != Wall:
 			current = NewCell(frontRow, frontCol, current)
-			if visited[maze.GetIndex(current)] {
-				maze.SetGrid(current.GetRow(), current.GetCol(), Visited)
-			} else {
-				maze.SetGrid(current.GetRow(), current.GetCol(), Path)
-			}
 		case maze.IsValid(leftRow, leftCol) && maze.GetGrid()[leftRow][leftCol] != Wall:
 			dirIndex = leftDirIndex
 			current = NewCell(leftRow, leftCol, current)
-
-			if visited[maze.GetIndex(current)] {
-				maze.SetGrid(current.GetRow(), current.GetCol(), Visited)
-			} else {
-				maze.SetGrid(current.GetRow(), current.GetCol(), Path)
-			}
 		default:
 			dirIndex = (dirIndex + 2) % 4 // Turn around
 			backDir := directions[dirIndex]
@@ -72,13 +56,14 @@ func (solver *WallFollowerSolver) Solve(maze *Maze) (bool, []Grid) {
 
 			if maze.IsValid(backRow, backCol) && maze.GetGrid()[backRow][backCol] == Floor {
 				current = NewCell(backRow, backCol, current)
-				if visited[maze.GetIndex(current)] {
-					maze.SetGrid(current.GetRow(), current.GetCol(), Visited)
-				} else {
-					maze.SetGrid(current.GetRow(), current.GetCol(), Path)
-				}
 			}
 		}
+
+		if maze.GetGrid()[current.GetRow()][current.GetCol()] == Money {
+			coinsCollected++
+		}
+
+		setGridBasedOnVisited(maze, current, visited)
 
 		visited[maze.GetIndex(current)] = true
 		steps++
@@ -89,5 +74,13 @@ func (solver *WallFollowerSolver) Solve(maze *Maze) (bool, []Grid) {
 	maze.SetGrid(maze.GetEnd().GetRow(), maze.GetEnd().GetCol(), End)
 	path = append(path, maze.CopyGrid())
 
-	return true, path
+	return true, path, coinsCollected
+}
+
+func setGridBasedOnVisited(maze *Maze, cell *Cell, visited map[int]bool) {
+	if visited[maze.GetIndex(cell)] {
+		maze.SetGrid(cell.GetRow(), cell.GetCol(), Visited)
+	} else {
+		maze.SetGrid(cell.GetRow(), cell.GetCol(), Path)
+	}
 }

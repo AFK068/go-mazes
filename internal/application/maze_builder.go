@@ -76,14 +76,14 @@ func InitializeMaze() {
 
 	slog.Info("solving maze algorithm", slog.String("solver", fmt.Sprintf("%T", solver)))
 
-	found, path := solver.Solve(maze)
+	found, path, money := solver.Solve(maze)
 	infrastructure.RenderMazeWithGridStepsWithDelay(&path)
 
 	if found {
-		slog.Info("path found in maze")
-		fmt.Println("Path found!")
+		slog.Info("path found in maze. Money collected", slog.Int("money", money))
+		fmt.Println("Path found! Money collected:", money)
 	} else {
-		slog.Info("no path found in maze")
-		fmt.Println("No path found.")
+		slog.Info("no path found in maze. Money collected", slog.Int("money", money))
+		fmt.Println("No path found. Money collected:", money)
 	}
 }
