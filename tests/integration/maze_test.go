@@ -69,6 +69,7 @@ func TestNewMaze(t *testing.T) {
 	assert.Equal(t, 10, maze.GetCols(), "Expected cols to be adjusted to nearest even value")
 
 	maze = domain.NewMaze(8, 8)
+
 	for i := 0; i < 8; i++ {
 		for j := 0; j < 8; j++ {
 			assert.Equal(t, domain.Wall, maze.GetGrid()[i][j], "Expected all cells to be initialized as walls")
