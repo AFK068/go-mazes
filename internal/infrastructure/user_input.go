@@ -1,90 +1,137 @@
 package infrastructure
 
 import (
-	"bufio"
 	"fmt"
-	"os"
+	"log/slog"
 	"strconv"
-	"strings"
+
+	"github.com/es-debug/backend-academy-2024-go-template/internal/domain"
+	"github.com/manifoldco/promptui"
 )
 
 func GetAndRoundWidthAndHeightFromUser() (int, int, error) {
-	reader := bufio.NewReader(os.Stdin)
-	var width, height int
-
-	for {
-		fmt.Print("Enter the width (minimum 8, maximum 200): ")
-		widthStr, err := reader.ReadString('\n')
+	validate := func(input string) error {
+		value, err := strconv.Atoi(input)
 		if err != nil {
-			return 0, 0, fmt.Errorf("reading width: %w", err)
+			slog.Error("converting width to int", slog.String("error", err.Error()))
+			return &domain.InvalidInput{Message: "Invalid input."}
 		}
-		widthStr = strings.TrimSpace(widthStr)
-		width, err = strconv.Atoi(widthStr)
-		if err != nil {
-			return 0, 0, fmt.Errorf("converting width to int: %w", err)
+		if value < 8 || value > 250 {
+			slog.Error("invalid width value", slog.Int("value", value))
+			return &domain.InvalidInput{Message: "Invalid input."}
 		}
-		if width >= 8 && width <= 250 {
-			break
-		}
-		fmt.Println("Invalid width. Please enter an integer between 8 and 250.")
+		return nil
 	}
 
-	for {
-		fmt.Print("Enter the height (minimum 8, maximum 60): ")
-		heightStr, err := reader.ReadString('\n')
+	promptWidth := promptui.Prompt{
+		Label:    "Enter the width (minimum 8, maximum 250)",
+		Validate: validate,
+	}
+
+	widthStr, err := promptWidth.Run()
+	if err != nil {
+		slog.Error("prompting width", slog.String("error", err.Error()))
+		return 0, 0, fmt.Errorf("promting width: %w", err)
+	}
+
+	width, err := strconv.Atoi(widthStr)
+	if err != nil {
+		slog.Error("converting width to int", slog.String("error", err.Error()))
+		return 0, 0, fmt.Errorf("converting width to int: %w", err)
+	}
+
+	validate = func(input string) error {
+		value, err := strconv.Atoi(input)
 		if err != nil {
-			return 0, 0, fmt.Errorf("reading height: %w", err)
+			slog.Error("converting height to int", slog.String("error", err.Error()))
+			return &domain.InvalidInput{Message: "Invalid input."}
 		}
-		heightStr = strings.TrimSpace(heightStr)
-		height, err = strconv.Atoi(heightStr)
-		if err != nil {
-			return 0, 0, fmt.Errorf("converting height to int: %w", err)
+		if value < 8 || value > 70 {
+			slog.Error("invalid height", slog.String("height", input))
+			return &domain.InvalidInput{Message: "Invalid input."}
 		}
-		if height >= 8 && height <= 70 {
-			break
-		}
-		fmt.Println("Invalid height. Please enter an integer between 8 and 70.")
+		return nil
+	}
+
+	promptHeight := promptui.Prompt{
+		Label:    "Enter the height (minimum 8, maximum 70)",
+		Validate: validate,
+	}
+
+	heightStr, err := promptHeight.Run()
+	if err != nil {
+		slog.Error("prompting height", slog.String("error", err.Error()))
+		return 0, 0, fmt.Errorf("promting height: %w", err)
+	}
+
+	height, err := strconv.Atoi(heightStr)
+	if err != nil {
+		slog.Error("converting height to int", slog.String("error", err.Error()))
+		return 0, 0, fmt.Errorf("converting height to int: %w", err)
 	}
 
 	return width, height, nil
 }
 
 func GetCoordinatesFromUser(maxValueX, maxValueY int) (int, int, error) {
-	reader := bufio.NewReader(os.Stdin)
-	var x, y int
-
-	for {
-		fmt.Printf("Enter the x coordinate (in the range from 1 to %d): ", maxValueX)
-		xStr, err := reader.ReadString('\n')
+	validate := func(input string) error {
+		value, err := strconv.Atoi(input)
 		if err != nil {
-			return 0, 0, fmt.Errorf("reading width: %w", err)
+			slog.Error("converting input to int", slog.String("error", err.Error()))
+			return &domain.InvalidInput{Message: "Invalid input."}
 		}
-		xStr = strings.TrimSpace(xStr)
-		x, err = strconv.Atoi(xStr)
-		if err != nil {
-			return 0, 0, fmt.Errorf("converting width to int: %w", err)
+		if value < 1 || value > maxValueX {
+			slog.Error("invalid input value", slog.String("input", input))
+			return &domain.InvalidInput{Message: "Invalid input."}
 		}
-		if x >= 1 && x <= maxValueX {
-			break
-		}
-		fmt.Printf("Invalid x coordinate value. Please enter an integer between 0 and %d", maxValueX)
+		return nil
 	}
 
-	for {
-		fmt.Printf("Enter the y coordinate (in the range from 1 to %d): ", maxValueY)
-		yStr, err := reader.ReadString('\n')
+	promptX := promptui.Prompt{
+		Label:    fmt.Sprintf("Enter the x coordinate (in the range from 1 to %d)", maxValueX),
+		Validate: validate,
+	}
+
+	xStr, err := promptX.Run()
+	if err != nil {
+		slog.Error("prompting x coordinate", slog.String("error", err.Error()))
+		return 0, 0, fmt.Errorf("prompting x coordinate: %w", err)
+	}
+
+	x, err := strconv.Atoi(xStr)
+	if err != nil {
+		slog.Error("converting x to int", slog.String("error", err.Error()))
+		return 0, 0, fmt.Errorf("converting x to int: %w", err)
+	}
+
+	validate = func(input string) error {
+		value, err := strconv.Atoi(input)
 		if err != nil {
-			return 0, 0, fmt.Errorf("reading height: %w", err)
+			slog.Error("converting input to int", slog.String("error", err.Error()))
+			return &domain.InvalidInput{Message: "Invalid input."}
 		}
-		yStr = strings.TrimSpace(yStr)
-		y, err = strconv.Atoi(yStr)
-		if err != nil {
-			return 0, 0, fmt.Errorf("converting height to int: %w", err)
+		if value < 1 || value > maxValueY {
+			slog.Error("invalid input value", slog.String("input", input))
+			return &domain.InvalidInput{Message: "Invalid input."}
 		}
-		if y >= 1 && y <= maxValueY {
-			break
-		}
-		fmt.Printf("Invalid y coordinate value. Please enter an integer between 0 and %d", maxValueY)
+		return nil
+	}
+
+	promptY := promptui.Prompt{
+		Label:    fmt.Sprintf("Enter the y coordinate (in the range from 1 to %d)", maxValueY),
+		Validate: validate,
+	}
+
+	yStr, err := promptY.Run()
+	if err != nil {
+		slog.Error("prompting y coordinate", slog.String("error", err.Error()))
+		return 0, 0, fmt.Errorf("prompting y coordinate: %w", err)
+	}
+
+	y, err := strconv.Atoi(yStr)
+	if err != nil {
+		slog.Error("converting y to int", slog.String("error", err.Error()))
+		return 0, 0, fmt.Errorf("converting y to int: %w", err)
 	}
 
 	return x, y, nil

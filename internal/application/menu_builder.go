@@ -2,6 +2,7 @@ package application
 
 import (
 	"fmt"
+	"log/slog"
 
 	"github.com/es-debug/backend-academy-2024-go-template/internal/domain"
 	"github.com/es-debug/backend-academy-2024-go-template/pkg"
@@ -15,12 +16,14 @@ func displayMenu(title string, items []string) (int, error) {
 
 	selectedIndex, err := menu.Display()
 	if err != nil {
+		slog.Error("displaying menu", slog.String("error", err.Error()))
 		return 0, fmt.Errorf("displaying menu: %w", err)
 	}
 
 	if selectedIndex >= 0 && selectedIndex < len(items) {
 		return selectedIndex, nil
 	} else {
+		slog.Error("invalid selection", slog.Int("selected_index", selectedIndex))
 		return -1, fmt.Errorf("invalid selection")
 	}
 }
@@ -34,6 +37,7 @@ func selectGenerator() (domain.Generator, error) {
 
 	selectedIndex, err := displayMenu("Select maze generation algorithm", []string{"Kruskal's algorithm", "Prim's algorithm"})
 	if err != nil {
+		slog.Error("selecting generator", slog.String("error", err.Error()))
 		return nil, fmt.Errorf("selecting generator: %w", err)
 	}
 
@@ -50,6 +54,7 @@ func selectSolver() (domain.Solver, error) {
 
 	selectedIndex, err := displayMenu("Select maze solving algorithm", []string{"Depth-first search", "Breadth-first search", "Wall follower"})
 	if err != nil {
+		slog.Error("selecting solver", slog.String("error", err.Error()))
 		return nil, fmt.Errorf("selecting solver: %w", err)
 	}
 
