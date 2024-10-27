@@ -3,7 +3,7 @@ package domain
 type BFSSolver struct{}
 
 // Breadth-first search algorithm.
-func (dfs *BFSSolver) Solve(maze *Maze) (bool, []Grid, int) {
+func (dfs *BFSSolver) Solve(maze *Maze) (found bool, path []Grid, coinsCollected int) {
 	queue := []*Cell{}
 
 	start := maze.GetStart()
@@ -12,11 +12,9 @@ func (dfs *BFSSolver) Solve(maze *Maze) (bool, []Grid, int) {
 	visited := make(map[int]bool)
 	visited[maze.GetIndex(start)] = true
 
-	var path []Grid
 	path = append(path, maze.CopyGrid())
 
 	var current *Cell
-	coinsCollected := 0
 
 	for len(queue) != 0 {
 		current = queue[0]
@@ -38,8 +36,8 @@ func (dfs *BFSSolver) Solve(maze *Maze) (bool, []Grid, int) {
 		}
 
 		path = append(path, maze.CopyGrid())
-		for _, neighbor := range maze.GetNeighbours(current, Floor) {
 
+		for _, neighbor := range maze.GetNeighbours(current, Floor) {
 			if !visited[maze.GetIndex(neighbor)] {
 				queue = append(queue, neighbor)
 				visited[maze.GetIndex(neighbor)] = true

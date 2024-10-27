@@ -587,3 +587,50 @@ time=2024-10-27T18:55:23.629+03:00 level=ERROR msg="converting input to int" err
 time=2024-10-27T18:55:29.798+03:00 level=INFO msg="generating maze" height=16 width=16 start_x=1 start_y=1 end_x=15 end_y=15 generator=*domain.KruskalGenerator
 time=2024-10-27T18:55:40.140+03:00 level=INFO msg="solving maze algorithm" solver=*domain.WallFollowerSolver
 time=2024-10-27T18:55:45.234+03:00 level=INFO msg="path found in maze. Money collected" money=12
+time=2024-10-27T19:10:30.634+03:00 level=ERROR msg="converting width to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:10:32.311+03:00 level=ERROR msg="invalid width value" value=1
+time=2024-10-27T19:10:32.839+03:00 level=ERROR msg="converting width to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:10:32.967+03:00 level=ERROR msg="converting width to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:10:33.266+03:00 level=ERROR msg="invalid width value" value=3
+time=2024-10-27T19:10:33.483+03:00 level=ERROR msg="converting height to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:10:33.591+03:00 level=ERROR msg="invalid height" height=3
+time=2024-10-27T19:10:33.832+03:00 level=INFO msg="console size is big enough" width=235 height=37
+time=2024-10-27T19:10:33.833+03:00 level=ERROR msg="converting input to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:10:34.396+03:00 level=ERROR msg="converting input to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:10:34.596+03:00 level=ERROR msg="converting input to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:10:37.034+03:00 level=ERROR msg="converting input to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:10:38.596+03:00 level=INFO msg="generating maze" height=30 width=30 start_x=1 start_y=1 end_x=29 end_y=29 generator=*domain.PrimGenerator
+time=2024-10-27T19:11:27.099+03:00 level=INFO msg="solving maze algorithm" solver=*domain.BFSSolver
+time=2024-10-27T19:11:43.239+03:00 level=INFO msg="path found in maze. Money collected" money=43
+time=2024-10-27T19:31:55.883+03:00 level=ERROR msg="converting width to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:31:57.199+03:00 level=ERROR msg="invalid width value" value=3
+time=2024-10-27T19:31:57.649+03:00 level=ERROR msg="converting height to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:31:57.763+03:00 level=ERROR msg="invalid height" height=3
+time=2024-10-27T19:31:57.980+03:00 level=INFO msg="console size is big enough" width=252 height=37
+time=2024-10-27T19:31:59.898+03:00 level=ERROR msg="converting input to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:32:05.362+03:00 level=ERROR msg="converting input to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:32:05.951+03:00 level=ERROR msg="converting input to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:32:07.383+03:00 level=ERROR msg="converting input to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:32:07.880+03:00 level=INFO msg="generating maze" height=30 width=30 start_x=27 start_y=27 end_x=19 end_y=19 generator=*domain.KruskalGenerator
+time=2024-10-27T19:32:17.537+03:00 level=INFO msg="solving maze algorithm" solver=*domain.WallFollowerSolver
+time=2024-10-27T19:32:20.564+03:00 level=INFO msg="path found in maze. Money collected" money=7
+time=2024-10-27T19:32:29.545+03:00 level=ERROR msg="converting width to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:32:31.435+03:00 level=ERROR msg="invalid width value" value=1
+time=2024-10-27T19:32:31.623+03:00 level=ERROR msg="converting width to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:32:31.789+03:00 level=ERROR msg="converting width to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:32:31.877+03:00 level=ERROR msg="invalid width value" value=1
+time=2024-10-27T19:32:32.146+03:00 level=ERROR msg="invalid width value" value=1
+time=2024-10-27T19:32:32.321+03:00 level=ERROR msg="converting width to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:32:32.479+03:00 level=ERROR msg="converting width to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:32:32.625+03:00 level=ERROR msg="converting width to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:32:32.789+03:00 level=ERROR msg="invalid width value" value=3
+time=2024-10-27T19:32:33.005+03:00 level=ERROR msg="converting height to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:32:33.128+03:00 level=ERROR msg="invalid height" height=3
+time=2024-10-27T19:32:33.562+03:00 level=INFO msg="console size is big enough" width=252 height=37
+time=2024-10-27T19:32:34.622+03:00 level=ERROR msg="converting input to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:32:35.693+03:00 level=ERROR msg="converting input to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:32:35.871+03:00 level=ERROR msg="converting input to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:32:36.661+03:00 level=ERROR msg="converting input to int" error="strconv.Atoi: parsing \"\": invalid syntax"
+time=2024-10-27T19:32:37.015+03:00 level=INFO msg="generating maze" height=30 width=30 start_x=0 start_y=0 end_x=19 end_y=19 generator=*domain.PrimGenerator
+time=2024-10-27T19:33:00.193+03:00 level=INFO msg="solving maze algorithm" solver=*domain.DFSSolver
+time=2024-10-27T19:33:10.232+03:00 level=INFO msg="path found in maze. Money collected" money=16

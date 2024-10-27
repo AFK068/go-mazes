@@ -6,8 +6,7 @@ type WallFollowerSolver struct{}
 
 const MaxSteps = 100000
 
-func (solver *WallFollowerSolver) Solve(maze *Maze) (bool, []Grid, int) {
-	var path []Grid
+func (solver *WallFollowerSolver) Solve(maze *Maze) (found bool, path []Grid, coinsCollected int) {
 	path = append(path, maze.CopyGrid())
 
 	current := maze.GetStart()
@@ -16,7 +15,6 @@ func (solver *WallFollowerSolver) Solve(maze *Maze) (bool, []Grid, int) {
 
 	visited := make(map[int]bool)
 	visited[maze.GetIndex(current)] = true
-	coinsCollected := 0
 	steps := 0
 
 	for current.GetRow() != maze.GetEnd().GetRow() || current.GetCol() != maze.GetEnd().GetCol() {

@@ -9,7 +9,7 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-func GetAndRoundWidthAndHeightFromUser() (int, int, error) {
+func GetAndRoundWidthAndHeightFromUser() (width, height int, err error) {
 	validate := func(input string) error {
 		value, err := strconv.Atoi(input)
 		if err != nil {
@@ -36,7 +36,7 @@ func GetAndRoundWidthAndHeightFromUser() (int, int, error) {
 		return 0, 0, fmt.Errorf("promting width: %w", err)
 	}
 
-	width, err := strconv.Atoi(widthStr)
+	width, err = strconv.Atoi(widthStr)
 	if err != nil {
 		slog.Error("converting width to int", slog.String("error", err.Error()))
 		return 0, 0, fmt.Errorf("converting width to int: %w", err)
@@ -69,7 +69,7 @@ func GetAndRoundWidthAndHeightFromUser() (int, int, error) {
 		return 0, 0, fmt.Errorf("promting height: %w", err)
 	}
 
-	height, err := strconv.Atoi(heightStr)
+	height, err = strconv.Atoi(heightStr)
 	if err != nil {
 		slog.Error("converting height to int", slog.String("error", err.Error()))
 		return 0, 0, fmt.Errorf("converting height to int: %w", err)
@@ -78,7 +78,7 @@ func GetAndRoundWidthAndHeightFromUser() (int, int, error) {
 	return width, height, nil
 }
 
-func GetCoordinatesFromUser(maxValueX, maxValueY int) (int, int, error) {
+func GetCoordinatesFromUser(maxValueX, maxValueY int) (x, y int, err error) {
 	validate := func(input string) error {
 		value, err := strconv.Atoi(input)
 		if err != nil {
@@ -105,7 +105,7 @@ func GetCoordinatesFromUser(maxValueX, maxValueY int) (int, int, error) {
 		return 0, 0, fmt.Errorf("prompting x coordinate: %w", err)
 	}
 
-	x, err := strconv.Atoi(xStr)
+	x, err = strconv.Atoi(xStr)
 	if err != nil {
 		slog.Error("converting x to int", slog.String("error", err.Error()))
 		return 0, 0, fmt.Errorf("converting x to int: %w", err)
@@ -139,7 +139,7 @@ func GetCoordinatesFromUser(maxValueX, maxValueY int) (int, int, error) {
 		return 0, 0, fmt.Errorf("prompting y coordinate: %w", err)
 	}
 
-	y, err := strconv.Atoi(yStr)
+	y, err = strconv.Atoi(yStr)
 	if err != nil {
 		slog.Error("converting y to int", slog.String("error", err.Error()))
 		return 0, 0, fmt.Errorf("converting y to int: %w", err)
