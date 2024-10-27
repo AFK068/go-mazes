@@ -3,7 +3,7 @@ package domain
 type DFSSolver struct{}
 
 // Dipth First Search algorithm.
-func (dfs *DFSSolver) Solve(maze *Maze) (bool, []Grid, int) {
+func (dfs *DFSSolver) Solve(maze *Maze) (found bool, path []Grid, coinsCollected int) {
 	stack := []*Cell{}
 	start := maze.GetStart()
 	current := start
@@ -11,8 +11,6 @@ func (dfs *DFSSolver) Solve(maze *Maze) (bool, []Grid, int) {
 	visited := make(map[int]bool)
 	visited[maze.GetIndex(start)] = true
 
-	var path []Grid
-	coinsCollected := 0
 	path = append(path, maze.CopyGrid())
 
 	for maze.GetEnd().GetCol() != current.GetCol() || maze.GetEnd().GetRow() != current.GetRow() {

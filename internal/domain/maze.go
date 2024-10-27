@@ -144,7 +144,7 @@ func (mz *Maze) SetEnd(cell *Cell) {
 	}
 }
 
-func (mz *Maze) GetNeighbours(cell *Cell, сellType rune) []*Cell {
+func (mz *Maze) GetNeighbours(cell *Cell, cellType rune) []*Cell {
 	neighbours := make([]*Cell, 0)
 
 	var offsets = [][2]int{
@@ -158,7 +158,7 @@ func (mz *Maze) GetNeighbours(cell *Cell, сellType rune) []*Cell {
 		row := cell.row + offset[0]
 		col := cell.col + offset[1]
 
-		if ((сellType == Floor) && mz.IsPathable(row, col)) || ((сellType == Wall) && mz.IsWall(row, col)) {
+		if ((cellType == Floor) && mz.IsPathable(row, col)) || ((cellType == Wall) && mz.IsWall(row, col)) {
 			neighbours = append(neighbours, NewCell(row, col, cell))
 		}
 	}

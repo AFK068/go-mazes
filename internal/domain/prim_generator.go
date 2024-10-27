@@ -1,24 +1,20 @@
 package domain
 
 import (
-	"time"
-
 	"golang.org/x/exp/rand"
 )
 
 type PrimGenerator struct{}
 
 func (g *PrimGenerator) Generate(maze *Maze, startCell, endCell *Cell) *Maze {
-	rand.Seed(uint64(time.Now().UnixNano()))
-
-	// Set start cell for generate maze
+	// Set start cell for generate maze.
 	start := NewCell(0, 0, nil)
 
 	maze.SetGrid(0, 0, Floor)
 
 	frontier := []*Cell{}
 
-	// Add the start cells neighbors to the frontier
+	// Add the start cells neighbors to the frontier.
 	frontier = append(frontier, NewCell(1, 0, start), NewCell(0, 1, start))
 
 	var child, parent *Cell
