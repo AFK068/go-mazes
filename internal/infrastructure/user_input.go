@@ -78,7 +78,7 @@ func GetAndRoundWidthAndHeightFromUser() (width, height int, err error) {
 	return width, height, nil
 }
 
-func GetCoordinatesFromUser(maxValueX, maxValueY int) (x, y int, err error) {
+func GetCoordinatesFromUser(maxValueX, maxValueY int, message string) (x, y int, err error) {
 	validate := func(input string) error {
 		value, err := strconv.Atoi(input)
 		if err != nil {
@@ -95,7 +95,7 @@ func GetCoordinatesFromUser(maxValueX, maxValueY int) (x, y int, err error) {
 	}
 
 	promptX := promptui.Prompt{
-		Label:    fmt.Sprintf("Enter the x coordinate (in the range from 1 to %d)", maxValueX),
+		Label:    fmt.Sprintf("Enter the x %s coordinate (in the range from 1 to %d)", message, maxValueX),
 		Validate: validate,
 	}
 
@@ -129,7 +129,7 @@ func GetCoordinatesFromUser(maxValueX, maxValueY int) (x, y int, err error) {
 	}
 
 	promptY := promptui.Prompt{
-		Label:    fmt.Sprintf("Enter the y coordinate (in the range from 1 to %d)", maxValueY),
+		Label:    fmt.Sprintf("Enter the y %s coordinate (in the range from 1 to %d)", message, maxValueY),
 		Validate: validate,
 	}
 
