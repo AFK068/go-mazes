@@ -14,3 +14,37 @@
   - `domain` - пакет, в котором содержатся модели приложения.
   - `infrastructure` - пакет, в котором содержатся инфраструктурные компоненты приложения(работа с выводом пользователю, работа с диском, работа с сетью и т.д.).
 - `pkg` – директория, содержащая пакеты, которые могут быть импортированы другими пакетами вне проекта. Общей рекомендацией является то, что пакеты, содержащиеся в `pkg` должны быть независимыми от остальных пакетов проекта.
+
+<br />
+
+# Kruskals generate maze
+
+<p align="center">
+  <img src="assets/kruskals.gif">
+</p>
+
+# Prim generate maze
+
+<p align="center">
+  <img src="assets/prim.gif">
+</p>
+
+
+# Depth first search solve maze
+
+<p align="center">
+  <img src="assets/dfs.gif">
+</p>
+
+# Breadth first search solve maze
+
+<p align="center">
+  <img src="assets/bfs.gif">
+</p>
+
+
+# Wall follower solve maze
+
+<p align="center">
+  <img src="assets/wall.gif">
+</p>
