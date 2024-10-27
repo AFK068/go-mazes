@@ -42,6 +42,7 @@ func (m *Menu) AddItem(option string) *Menu {
 	}
 
 	m.MenuItems = append(m.MenuItems, menuItem)
+
 	return m
 }
 
@@ -58,6 +59,7 @@ func (m *Menu) renderMenuItems(redraw bool) {
 
 		menuItemText := menuItem.Text
 		cursor := "  "
+
 		if index == m.CursorPosition {
 			cursor = goterm.Color("> ", goterm.YELLOW)
 			menuItemText = goterm.Color(menuItemText, goterm.YELLOW)
@@ -72,10 +74,7 @@ func (m *Menu) Display() (int, error) {
 		return 0, nil
 	}
 
-	defer func() {
-		// Show cursor again.
-		fmt.Printf("\033[?25h")
-	}()
+	defer fmt.Printf("\033[?25h")
 
 	fmt.Printf("%s\n", goterm.Color(goterm.Bold(m.Prompt)+":", goterm.CYAN))
 
@@ -89,13 +88,15 @@ func (m *Menu) Display() (int, error) {
 		if err != nil {
 			return 0, fmt.Errorf("getting input: %w", err)
 		}
-		if keyCode == enter {
+
+		switch keyCode {
+		case enter:
 			fmt.Println("\r")
 			return m.CursorPosition, nil
-		} else if keyCode == up {
+		case up:
 			m.CursorPosition = (m.CursorPosition + len(m.MenuItems) - 1) % len(m.MenuItems)
 			m.renderMenuItems(true)
-		} else if keyCode == down {
+		case down:
 			m.CursorPosition = (m.CursorPosition + 1) % len(m.MenuItems)
 			m.renderMenuItems(true)
 		}
@@ -114,13 +115,21 @@ func getInput() (byte, error) {
 	}
 
 	readBytes := make([]byte, 3)
+
 	read, err := t.Read(readBytes)
 	if err != nil {
 		return 0, fmt.Errorf("reading from terminal: %w", err)
 	}
 
-	t.Restore()
-	t.Close()
+	err = t.Restore()
+	if err != nil {
+		return 0, fmt.Errorf("restoring terminal: %w", err)
+	}
+
+	err = t.Close()
+	if err != nil {
+		return 0, fmt.Errorf("closing terminal: %w", err)
+	}
 
 	// Arrow keys are prefixed with the ANSI escape code which take up the first two bytes.
 	// The third byte is the key specific value we are looking for.

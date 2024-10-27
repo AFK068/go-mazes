@@ -47,12 +47,12 @@ func NewMaze(r, w int) *Maze {
 	}
 
 	for i := 0; i < rows; i++ {
-		temp_row := make([]rune, cols)
+		tempRow := make([]rune, cols)
 		for j := 0; j < cols; j++ {
-			temp_row[j] = Wall
+			tempRow[j] = Wall
 		}
 
-		mz.grid[i] = temp_row
+		mz.grid[i] = tempRow
 	}
 
 	return mz

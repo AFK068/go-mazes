@@ -13,17 +13,18 @@ func InitializeMaze() {
 	if err != nil {
 		slog.Error("getting width and height maze size", slog.String("error", err.Error()))
 		fmt.Println("Failed to get width and height from user:", err)
+
 		return
 	}
 
-	width = width - width%2
-	height = height - height%2
+	width -= width % 2
+	height -= height % 2
 
-	// Controling that size maze is not bigger than console size
 	err = GetConsoleSize(width, height)
 	if err != nil {
 		slog.Error("getting console size", slog.String("error", err.Error()))
 		fmt.Println("Failed to get console size:", err)
+
 		return
 	}
 
@@ -31,6 +32,7 @@ func InitializeMaze() {
 	if err != nil {
 		slog.Error("getting start coordinates", slog.String("error", err.Error()))
 		fmt.Println("Failed to get start coordinates from user:", err)
+
 		return
 	}
 
@@ -38,6 +40,7 @@ func InitializeMaze() {
 	if err != nil {
 		slog.Error("getting end coordinates", slog.String("error", err.Error()))
 		fmt.Println("Failed to get end coordinates from user:", err)
+
 		return
 	}
 
@@ -48,6 +51,7 @@ func InitializeMaze() {
 	if err != nil {
 		slog.Error("selecting generator", slog.String("error", err.Error()))
 		fmt.Println("Failed to select generator:", err)
+
 		return
 	}
 
@@ -66,6 +70,7 @@ func InitializeMaze() {
 	if err != nil {
 		slog.Error("selecting solver", slog.String("error", err.Error()))
 		fmt.Println("Failed to select solver:", err)
+
 		return
 	}
 

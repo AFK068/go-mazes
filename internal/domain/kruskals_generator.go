@@ -10,7 +10,9 @@ type KruskalGenerator struct{}
 
 func (g *KruskalGenerator) Generate(maze *Maze, startCell, endCell *Cell) *Maze {
 	rand.Seed(uint64(time.Now().UnixNano()))
+
 	nodes := make([]*Cell, 0)
+
 	for i := 0; i < maze.GetRows(); i += 2 {
 		for j := 0; j < maze.GetCols(); j += 2 {
 			nodes = append(nodes, NewCell(i, j, nil))
@@ -19,8 +21,8 @@ func (g *KruskalGenerator) Generate(maze *Maze, startCell, endCell *Cell) *Maze 
 
 	nodeRows := maze.GetRows() / 2
 	nodeCols := maze.GetCols() / 2
-
 	edges := make([]*Edge, 0)
+
 	for r := 0; r < nodeRows; r++ {
 		for c := 0; c < nodeCols; c++ {
 			thisCell := c + (r * nodeCols)
@@ -30,6 +32,7 @@ func (g *KruskalGenerator) Generate(maze *Maze, startCell, endCell *Cell) *Maze 
 			if c < nodeCols-1 && nodes[thisCell].GetCol() != maze.GetCols()-1 {
 				edges = append(edges, NewEdge(thisCell, rightCell))
 			}
+
 			if r < nodeRows-1 && nodes[thisCell].GetRow() != maze.GetRows()-1 {
 				edges = append(edges, NewEdge(thisCell, downCell))
 			}
@@ -66,6 +69,7 @@ func (g *KruskalGenerator) Generate(maze *Maze, startCell, endCell *Cell) *Maze 
 			maze.SetGrid(secondRow, secondCol, Floor)
 			maze.SetGrid(midRow, midCol, Floor)
 			Join(sets, x, y)
+
 			totalEdges++
 		}
 	}
@@ -73,6 +77,7 @@ func (g *KruskalGenerator) Generate(maze *Maze, startCell, endCell *Cell) *Maze 
 	maze.SetStart(startCell)
 	maze.SetEnd(endCell)
 	maze.generateSteps = append(maze.generateSteps, maze.CopyGrid()) // Generate animation
+
 	return maze
 }
 
@@ -80,6 +85,7 @@ func Find(sets []*UnionFindSet, x int) int {
 	if sets[x].parent != x {
 		sets[x].parent = Find(sets, sets[x].parent)
 	}
+
 	return sets[x].parent
 }
 
@@ -88,11 +94,12 @@ func Join(sets []*UnionFindSet, x, y int) {
 	rootY := Find(sets, y)
 
 	if rootX != rootY {
-		if sets[rootX].rank > sets[rootY].rank {
+		switch {
+		case sets[rootX].rank > sets[rootY].rank:
 			sets[rootY].parent = rootX
-		} else if sets[rootX].rank < sets[rootY].rank {
+		case sets[rootX].rank < sets[rootY].rank:
 			sets[rootX].parent = rootY
-		} else {
+		default:
 			sets[rootY].parent = rootX
 			sets[rootX].rank++
 		}
