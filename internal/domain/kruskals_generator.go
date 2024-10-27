@@ -1,16 +1,12 @@
 package domain
 
 import (
-	"time"
-
 	"golang.org/x/exp/rand"
 )
 
 type KruskalGenerator struct{}
 
 func (g *KruskalGenerator) Generate(maze *Maze, startCell, endCell *Cell) *Maze {
-	rand.Seed(uint64(time.Now().UnixNano()))
-
 	nodes := make([]*Cell, 0)
 
 	for i := 0; i < maze.GetRows(); i += 2 {
@@ -50,8 +46,8 @@ func (g *KruskalGenerator) Generate(maze *Maze, startCell, endCell *Cell) *Maze 
 		nextEdge := edges[randIndex]
 		edges = append(edges[:randIndex], edges[randIndex+1:]...)
 
-		x := Find(sets, nextEdge.GetFirst())
-		y := Find(sets, nextEdge.GetSecond())
+		x := fing(sets, nextEdge.GetFirst())
+		y := fing(sets, nextEdge.GetSecond())
 
 		if x != y {
 			firstRow := nodes[nextEdge.GetFirst()].GetRow()
@@ -68,7 +64,7 @@ func (g *KruskalGenerator) Generate(maze *Maze, startCell, endCell *Cell) *Maze 
 			maze.SetGrid(firstRow, firstCol, Floor)
 			maze.SetGrid(secondRow, secondCol, Floor)
 			maze.SetGrid(midRow, midCol, Floor)
-			Join(sets, x, y)
+			join(sets, x, y)
 
 			totalEdges++
 		}
@@ -81,17 +77,17 @@ func (g *KruskalGenerator) Generate(maze *Maze, startCell, endCell *Cell) *Maze 
 	return maze
 }
 
-func Find(sets []*UnionFindSet, x int) int {
+func fing(sets []*UnionFindSet, x int) int {
 	if sets[x].parent != x {
-		sets[x].parent = Find(sets, sets[x].parent)
+		sets[x].parent = fing(sets, sets[x].parent)
 	}
 
 	return sets[x].parent
 }
 
-func Join(sets []*UnionFindSet, x, y int) {
-	rootX := Find(sets, x)
-	rootY := Find(sets, y)
+func join(sets []*UnionFindSet, x, y int) {
+	rootX := fing(sets, x)
+	rootY := fing(sets, y)
 
 	if rootX != rootY {
 		switch {

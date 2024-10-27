@@ -1,5 +1,10 @@
 package domain
 
+import (
+	"crypto/rand"
+	"math/big"
+)
+
 type Grid [][]rune
 
 const (
@@ -10,6 +15,7 @@ const (
 	Floor    rune = '⬜'
 	Start    rune = '🟦'
 	End      rune = '🟥'
+	Money    rune = '💰'
 )
 
 type Maze struct {
@@ -86,10 +92,32 @@ func (mz *Maze) GetIndex(cell *Cell) int {
 	return cell.GetRow()*mz.cols + cell.GetCol()
 }
 
+func (mz *Maze) IsWall(r, c int) bool {
+	return mz.IsValid(r, c) && mz.grid[r][c] == Wall
+}
+
+func (mz *Maze) IsValid(r, c int) bool {
+	return r >= 0 && r < mz.rows && c >= 0 && c < mz.cols
+}
+
+func (mz *Maze) IsPathable(r, c int) bool {
+	return mz.IsValid(r, c) && mz.grid[r][c] != Wall
+}
+
 func (mz *Maze) SetGrid(r, w int, val rune) {
 	if mz.IsValid(r, w) {
 		mz.grid[r][w] = val
 	}
+}
+
+func (mz *Maze) CopyGrid() Grid {
+	copyGrid := make([][]rune, len(mz.GetGrid()))
+	for i := 0; i < len(mz.GetGrid()); i++ {
+		copyGrid[i] = make([]rune, len(mz.GetGrid()[i]))
+		copy(copyGrid[i], mz.GetGrid()[i])
+	}
+
+	return copyGrid
 }
 
 func (mz *Maze) SetStart(cell *Cell) {
@@ -138,24 +166,17 @@ func (mz *Maze) GetNeighbours(cell *Cell, сellType rune) []*Cell {
 	return neighbours
 }
 
-func (mz *Maze) IsWall(r, c int) bool {
-	return mz.IsValid(r, c) && mz.grid[r][c] == Wall
-}
+func (mz *Maze) GenerateMoney() {
+	for i := 0; i < mz.GetRows(); i++ {
+		for j := 0; j < mz.GetCols(); j++ {
+			if mz.GetGrid()[i][j] == Floor {
+				randBInt, _ := rand.Int(rand.Reader, big.NewInt(10))
+				number := randBInt.Int64()
 
-func (mz *Maze) IsValid(r, c int) bool {
-	return r >= 0 && r < mz.rows && c >= 0 && c < mz.cols
-}
-
-func (mz *Maze) IsPathable(r, c int) bool {
-	return mz.IsValid(r, c) && mz.grid[r][c] != Wall
-}
-
-func (mz *Maze) CopyGrid() Grid {
-	copyGrid := make([][]rune, len(mz.GetGrid()))
-	for i := 0; i < len(mz.GetGrid()); i++ {
-		copyGrid[i] = make([]rune, len(mz.GetGrid()[i]))
-		copy(copyGrid[i], mz.GetGrid()[i])
+				if number < 1 {
+					mz.SetGrid(i, j, Money)
+				}
+			}
+		}
 	}
-
-	return copyGrid
 }

@@ -14,5 +14,11 @@ func NewGenerateMaze(generator Generator) *GenerateMaze {
 
 func (g *GenerateMaze) GenerateMaze(rowNums, colNums int, start *Cell, end *Cell) *Maze {
 	maze := NewMaze(rowNums, colNums)
-	return g.generator.Generate(maze, start, end)
+	genratedMaze := g.generator.Generate(maze, start, end)
+
+	// Generate money and add maze with money to generate steps.
+	genratedMaze.GenerateMoney()
+	maze.generateSteps = append(maze.generateSteps, maze.CopyGrid())
+
+	return genratedMaze
 }
