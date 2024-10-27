@@ -16,10 +16,12 @@ func GetAndRoundWidthAndHeightFromUser() (int, int, error) {
 			slog.Error("converting width to int", slog.String("error", err.Error()))
 			return &domain.InvalidInput{Message: "Invalid input."}
 		}
+
 		if value < 8 || value > 250 {
 			slog.Error("invalid width value", slog.Int("value", value))
 			return &domain.InvalidInput{Message: "Invalid input."}
 		}
+
 		return nil
 	}
 
@@ -46,10 +48,13 @@ func GetAndRoundWidthAndHeightFromUser() (int, int, error) {
 			slog.Error("converting height to int", slog.String("error", err.Error()))
 			return &domain.InvalidInput{Message: "Invalid input."}
 		}
+
 		if value < 8 || value > 70 {
 			slog.Error("invalid height", slog.String("height", input))
+
 			return &domain.InvalidInput{Message: "Invalid input."}
 		}
+
 		return nil
 	}
 
@@ -80,10 +85,12 @@ func GetCoordinatesFromUser(maxValueX, maxValueY int) (int, int, error) {
 			slog.Error("converting input to int", slog.String("error", err.Error()))
 			return &domain.InvalidInput{Message: "Invalid input."}
 		}
+
 		if value < 1 || value > maxValueX {
 			slog.Error("invalid input value", slog.String("input", input))
 			return &domain.InvalidInput{Message: "Invalid input."}
 		}
+
 		return nil
 	}
 
@@ -108,12 +115,16 @@ func GetCoordinatesFromUser(maxValueX, maxValueY int) (int, int, error) {
 		value, err := strconv.Atoi(input)
 		if err != nil {
 			slog.Error("converting input to int", slog.String("error", err.Error()))
+
 			return &domain.InvalidInput{Message: "Invalid input."}
 		}
+
 		if value < 1 || value > maxValueY {
 			slog.Error("invalid input value", slog.String("input", input))
+
 			return &domain.InvalidInput{Message: "Invalid input."}
 		}
+
 		return nil
 	}
 

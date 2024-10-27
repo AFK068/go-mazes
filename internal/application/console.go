@@ -17,6 +17,7 @@ func GetConsoleSize(expectedWidth, expectedHeight int) error {
 		cmd := exec.Command("stty", "size")
 		cmd.Stdin = os.Stdin
 		out, err := cmd.Output()
+
 		if err != nil {
 			slog.Error("getting console size", slog.String("error", err.Error()))
 			return fmt.Errorf("getting console size: %w", err)
@@ -47,9 +48,13 @@ func GetConsoleSize(expectedWidth, expectedHeight int) error {
 
 		if width != lastWidth || height != lastHeight {
 			slog.Info("current console size", slog.Int("width", width), slog.Int("height", height))
-			fmt.Printf("Current console size: width = %d, height = %d. Waiting for size to be width = %d, height = %d...\n", width, height, expectedWidth, expectedHeight)
+			fmt.Printf(
+				"Current console size: width = %d, height = %d. Waiting for size to be width = %d, height = %d...\n",
+				width, height, expectedWidth, expectedHeight)
+
 			lastWidth, lastHeight = width, height
 		}
+
 		time.Sleep(1 * time.Second)
 	}
 }

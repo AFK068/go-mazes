@@ -43,13 +43,16 @@ func printGrid(grid *domain.Grid) {
 	for i := 0; i < cols+1; i++ {
 		fmt.Print(string(domain.Wall))
 	}
+
 	fmt.Println()
 
 	for i := 0; i < rows; i++ {
 		fmt.Print(string(domain.Wall)) // Print left wall
+
 		for j := 0; j < cols; j++ {
 			fmt.Print(string((*grid)[i][j]))
 		}
+
 		fmt.Println()
 	}
 }

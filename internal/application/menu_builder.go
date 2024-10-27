@@ -22,13 +22,14 @@ func displayMenu(title string, items []string) (int, error) {
 
 	if selectedIndex >= 0 && selectedIndex < len(items) {
 		return selectedIndex, nil
-	} else {
-		slog.Error("invalid selection", slog.Int("selected_index", selectedIndex))
-		return -1, fmt.Errorf("invalid selection")
 	}
+
+	slog.Error("invalid selection index in menu", slog.Int("selected_index", selectedIndex))
+
+	return -1, fmt.Errorf("invalid selection")
 }
 
-// Displays a menu to select a maze generation algorithm and return the selected generator
+// Displays a menu to select a maze generation algorithm and return the selected generator.
 func selectGenerator() (domain.Generator, error) {
 	generators := []domain.Generator{
 		&domain.KruskalGenerator{},
@@ -44,7 +45,7 @@ func selectGenerator() (domain.Generator, error) {
 	return generators[selectedIndex], nil
 }
 
-// Displays a menu to select a maze solving algorithm and return the selected solver
+// Displays a menu to select a maze solving algorithm and return the selected solver.
 func selectSolver() (domain.Solver, error) {
 	solvers := []domain.Solver{
 		&domain.DFSSolver{},

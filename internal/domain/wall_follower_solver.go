@@ -12,15 +12,7 @@ func (solver *WallFollowerSolver) Solve(maze *Maze) (bool, []Grid) {
 
 	current := maze.GetStart()
 	dirIndex := 0
-
-	directions := []struct {
-		dx, dy int
-	}{
-		{0, 1},  // Right
-		{1, 0},  // Down
-		{0, -1}, // Left
-		{-1, 0}, // Up
-	}
+	directions := []struct{ dx, dy int }{{0, 1}, {1, 0}, {0, -1}, {-1, 0}}
 
 	visited := make(map[int]bool)
 	visited[maze.GetIndex(current)] = true
@@ -46,34 +38,38 @@ func (solver *WallFollowerSolver) Solve(maze *Maze) (bool, []Grid) {
 		leftRow := current.GetRow() + leftDir.dx
 		leftCol := current.GetCol() + leftDir.dy
 
-		if maze.IsValid(rightRow, rightCol) && maze.GetGrid()[rightRow][rightCol] != Wall {
+		switch {
+		case maze.IsValid(rightRow, rightCol) && maze.GetGrid()[rightRow][rightCol] != Wall:
 			dirIndex = rightDirIndex
 			current = NewCell(rightRow, rightCol, current)
+
 			if visited[maze.GetIndex(current)] {
 				maze.SetGrid(current.GetRow(), current.GetCol(), Visited)
 			} else {
 				maze.SetGrid(current.GetRow(), current.GetCol(), Path)
 			}
-		} else if maze.IsValid(frontRow, frontCol) && maze.GetGrid()[frontRow][frontCol] != Wall {
+		case maze.IsValid(frontRow, frontCol) && maze.GetGrid()[frontRow][frontCol] != Wall:
 			current = NewCell(frontRow, frontCol, current)
 			if visited[maze.GetIndex(current)] {
 				maze.SetGrid(current.GetRow(), current.GetCol(), Visited)
 			} else {
 				maze.SetGrid(current.GetRow(), current.GetCol(), Path)
 			}
-		} else if maze.IsValid(leftRow, leftCol) && maze.GetGrid()[leftRow][leftCol] != Wall {
+		case maze.IsValid(leftRow, leftCol) && maze.GetGrid()[leftRow][leftCol] != Wall:
 			dirIndex = leftDirIndex
 			current = NewCell(leftRow, leftCol, current)
+
 			if visited[maze.GetIndex(current)] {
 				maze.SetGrid(current.GetRow(), current.GetCol(), Visited)
 			} else {
 				maze.SetGrid(current.GetRow(), current.GetCol(), Path)
 			}
-		} else {
+		default:
 			dirIndex = (dirIndex + 2) % 4 // Turn around
 			backDir := directions[dirIndex]
 			backRow := current.GetRow() + backDir.dx
 			backCol := current.GetCol() + backDir.dy
+
 			if maze.IsValid(backRow, backCol) && maze.GetGrid()[backRow][backCol] == Floor {
 				current = NewCell(backRow, backCol, current)
 				if visited[maze.GetIndex(current)] {
@@ -86,10 +82,12 @@ func (solver *WallFollowerSolver) Solve(maze *Maze) (bool, []Grid) {
 
 		visited[maze.GetIndex(current)] = true
 		steps++
+
 		path = append(path, maze.CopyGrid())
 	}
 
 	maze.SetGrid(maze.GetEnd().GetRow(), maze.GetEnd().GetCol(), End)
 	path = append(path, maze.CopyGrid())
+
 	return true, path
 }

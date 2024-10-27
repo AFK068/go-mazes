@@ -2,7 +2,7 @@ package domain
 
 type DFSSolver struct{}
 
-// Dipth First Search algorithm
+// Dipth First Search algorithm.
 func (dfs *DFSSolver) Solve(maze *Maze) (bool, []Grid) {
 	stack := []*Cell{}
 	start := maze.GetStart()
@@ -18,6 +18,7 @@ func (dfs *DFSSolver) Solve(maze *Maze) (bool, []Grid) {
 		if nextMovePossible(maze, stack[len(stack)-1], visited) {
 			current = nextFesableMove(maze, stack[len(stack)-1], visited)
 			visited[maze.GetIndex(current)] = true
+
 			stack = append(stack, current)
 			maze.SetGrid(current.GetRow(), current.GetCol(), Path)
 			path = append(path, maze.CopyGrid())
@@ -26,8 +27,10 @@ func (dfs *DFSSolver) Solve(maze *Maze) (bool, []Grid) {
 			if len(stack) == 0 {
 				return false, path
 			}
+
 			maze.SetGrid(current.GetRow(), current.GetCol(), Floor)
 			current = stack[len(stack)-1]
+
 			path = append(path, maze.CopyGrid())
 		}
 	}
@@ -39,7 +42,7 @@ func (dfs *DFSSolver) Solve(maze *Maze) (bool, []Grid) {
 	return true, path
 }
 
-// Сheck if there are possible moves from the current position
+// Сheck if there are possible moves from the current position.
 func nextMovePossible(maze *Maze, cell *Cell, visited map[int]bool) bool {
 	neighbors := maze.GetNeighbours(cell, Floor)
 	for _, neighbor := range neighbors {
@@ -51,7 +54,7 @@ func nextMovePossible(maze *Maze, cell *Cell, visited map[int]bool) bool {
 	return false
 }
 
-// Take an unvisited neighbor
+// Take an unvisited neighbor.
 func nextFesableMove(maze *Maze, cell *Cell, visited map[int]bool) *Cell {
 	neighbors := maze.GetNeighbours(cell, Floor)
 	for _, neighbor := range neighbors {
@@ -59,5 +62,6 @@ func nextFesableMove(maze *Maze, cell *Cell, visited map[int]bool) *Cell {
 			return neighbor
 		}
 	}
+
 	return nil
 }
