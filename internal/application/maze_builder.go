@@ -36,7 +36,7 @@ func InitializeMaze() {
 		return
 	}
 
-	startCell, endCell, err := initializeStartEndCells(width, height)
+	startCell, endCell, err := initializeStartAndEndCells(width, height)
 	if err != nil {
 		slog.Error("initializing start and end cells", slog.String("error", err.Error()))
 		fmt.Println("Failed to initialize start and end cells:", err)
@@ -77,15 +77,15 @@ func InitializeMaze() {
 	}
 }
 
-func initializeStartEndCells(width, height int) (startCell, endCell *domain.Cell, err error) {
-	startX, startY, err := infrastructure.GetCoordinatesFromUser(width-1, height-1)
+func initializeStartAndEndCells(width, height int) (startCell, endCell *domain.Cell, err error) {
+	startX, startY, err := infrastructure.GetCoordinatesFromUser(width-1, height-1, "start")
 	if err != nil {
 		slog.Error("getting start coordinates", slog.String("error", err.Error()))
 
 		return nil, nil, fmt.Errorf("getting start coordinates: %w", err)
 	}
 
-	endX, endY, err := infrastructure.GetCoordinatesFromUser(width-1, height-1)
+	endX, endY, err := infrastructure.GetCoordinatesFromUser(width-1, height-1, "end")
 	if err != nil {
 		slog.Error("getting end coordinates", slog.String("error", err.Error()))
 
