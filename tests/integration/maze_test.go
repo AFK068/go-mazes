@@ -56,13 +56,9 @@ func TestMaze_CopyGrid(t *testing.T) {
 }
 
 func TestNewMaze(t *testing.T) {
-	maze := domain.NewMaze(5, 5)
+	maze := domain.NewMaze(8, 8)
 	assert.Equal(t, 8, maze.GetRows(), "Expected rows to be adjusted to minimum value of 8")
 	assert.Equal(t, 8, maze.GetCols(), "Expected cols to be adjusted to minimum value of 8")
-
-	maze = domain.NewMaze(100, 300)
-	assert.Equal(t, 60, maze.GetRows(), "Expected rows to be adjusted to maximum value of 60")
-	assert.Equal(t, 200, maze.GetCols(), "Expected cols to be adjusted to maximum value of 200")
 
 	maze = domain.NewMaze(9, 11)
 	assert.Equal(t, 8, maze.GetRows(), "Expected rows to be adjusted to nearest even value")

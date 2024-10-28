@@ -31,18 +31,6 @@ func NewMaze(r, w int) *Maze {
 	rows := r - r%2
 	cols := w - w%2
 
-	if rows < 8 {
-		rows = 8
-	} else if rows > 60 {
-		rows = 60
-	}
-
-	if cols < 8 {
-		cols = 8
-	} else if cols > 200 {
-		cols = 200
-	}
-
 	mz := &Maze{
 		rows,
 		cols,
