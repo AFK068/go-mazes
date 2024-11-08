@@ -22,8 +22,8 @@ func TestPrimGenerator_Generate(t *testing.T) {
 		generator := &domain.PrimGenerator{}
 		generatedMaze := generator.Generate(maze, startCell, endCell)
 
-		assert.Equal(t, startCell, generatedMaze.GetStart(), "Expected start cell to be set correctly")
-		assert.Equal(t, endCell, generatedMaze.GetEnd(), "Expected end cell to be set correctly")
+		assert.Equal(t, startCell, generatedMaze.Start, "Expected start cell to be set correctly")
+		assert.Equal(t, endCell, generatedMaze.End, "Expected end cell to be set correctly")
 
 		solver := &domain.BFSSolver{}
 		found, _, _ := solver.Solve(generatedMaze)
@@ -46,8 +46,8 @@ func TestKruskalsGenerator_Generate(t *testing.T) {
 		generator := &domain.KruskalGenerator{}
 		generatedMaze := generator.Generate(maze, startCell, endCell)
 
-		assert.Equal(t, startCell, generatedMaze.GetStart(), "Expected start cell to be set correctly")
-		assert.Equal(t, endCell, generatedMaze.GetEnd(), "Expected end cell to be set correctly")
+		assert.Equal(t, startCell, generatedMaze.Start, "Expected start cell to be set correctly")
+		assert.Equal(t, endCell, generatedMaze.End, "Expected end cell to be set correctly")
 
 		solver := &domain.BFSSolver{}
 		found, _, _ := solver.Solve(generatedMaze)

@@ -5,7 +5,7 @@ type DFSSolver struct{}
 // Dipth First Search algorithm.
 func (dfs *DFSSolver) Solve(maze *Maze) (found bool, path []Grid, coinsCollected int) {
 	stack := []*Cell{}
-	start := maze.GetStart()
+	start := maze.Start
 	current := start
 	stack = append(stack, start)
 	visited := make(map[int]bool)
@@ -13,17 +13,17 @@ func (dfs *DFSSolver) Solve(maze *Maze) (found bool, path []Grid, coinsCollected
 
 	path = append(path, maze.CopyGrid())
 
-	for maze.GetEnd().GetCol() != current.GetCol() || maze.GetEnd().GetRow() != current.GetRow() {
-		if nextMovePossible(maze, stack[len(stack)-1], visited) {
-			current = nextFesableMove(maze, stack[len(stack)-1], visited)
+	for maze.End.Col != current.Col || maze.End.Row != current.Row {
+		if maze.NextMovePossible(stack[len(stack)-1], visited) {
+			current = maze.NextFesableMove(stack[len(stack)-1], visited)
 			visited[maze.GetIndex(current)] = true
 
-			if maze.GetGrid()[current.GetRow()][current.GetCol()] == Money {
+			if maze.Grid[current.Row][current.Col] == Money {
 				coinsCollected++
 			}
 
 			stack = append(stack, current)
-			maze.SetGrid(current.GetRow(), current.GetCol(), Path)
+			maze.SetGrid(current.Row, current.Col, Path)
 			path = append(path, maze.CopyGrid())
 		} else {
 			stack = stack[:len(stack)-1]
@@ -31,7 +31,7 @@ func (dfs *DFSSolver) Solve(maze *Maze) (found bool, path []Grid, coinsCollected
 				return false, path, coinsCollected
 			}
 
-			maze.SetGrid(current.GetRow(), current.GetCol(), Floor)
+			maze.SetGrid(current.Row, current.Col, Floor)
 			current = stack[len(stack)-1]
 
 			path = append(path, maze.CopyGrid())
@@ -39,32 +39,8 @@ func (dfs *DFSSolver) Solve(maze *Maze) (found bool, path []Grid, coinsCollected
 	}
 
 	// Set the end cell
-	maze.SetGrid(maze.GetEnd().GetRow(), maze.GetEnd().GetCol(), End)
+	maze.SetGrid(maze.End.Row, maze.End.Col, End)
 	path = append(path, maze.CopyGrid())
 
 	return true, path, coinsCollected
-}
-
-// Сheck if there are possible moves from the current position.
-func nextMovePossible(maze *Maze, cell *Cell, visited map[int]bool) bool {
-	neighbors := maze.GetNeighbours(cell, Floor)
-	for _, neighbor := range neighbors {
-		if !visited[maze.GetIndex(neighbor)] {
-			return true
-		}
-	}
-
-	return false
-}
-
-// Take an unvisited neighbor.
-func nextFesableMove(maze *Maze, cell *Cell, visited map[int]bool) *Cell {
-	neighbors := maze.GetNeighbours(cell, Floor)
-	for _, neighbor := range neighbors {
-		if !visited[maze.GetIndex(neighbor)] {
-			return neighbor
-		}
-	}
-
-	return nil
 }

@@ -75,7 +75,7 @@ func GetAndRoundWidthAndHeightFromUser() (width, height int, err error) {
 		return 0, 0, fmt.Errorf("converting height to int: %w", err)
 	}
 
-	return width, height, nil
+	return width - width%2, height - height%2, nil
 }
 
 func GetCoordinatesFromUser(maxValueX, maxValueY int, message string) (x, y int, err error) {
