@@ -5,16 +5,16 @@ import (
 	"log/slog"
 
 	"github.com/es-debug/backend-academy-2024-go-template/internal/domain"
-	"github.com/es-debug/backend-academy-2024-go-template/pkg"
+	"github.com/es-debug/backend-academy-2024-go-template/pkg/menu"
 )
 
 func displayMenu(title string, items []string) (int, error) {
-	menu := pkg.NewMenu(title)
+	mainMenu := menu.NewMenu(title)
 	for _, item := range items {
-		menu.AddItem(item)
+		mainMenu.AddItem(item)
 	}
 
-	selectedIndex, err := menu.Display()
+	selectedIndex, err := mainMenu.Display()
 	if err != nil {
 		slog.Error("displaying menu", slog.String("error", err.Error()))
 		return 0, fmt.Errorf("displaying menu: %w", err)

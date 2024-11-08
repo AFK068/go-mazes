@@ -1,34 +1,22 @@
 package domain
 
 type Cell struct {
-	row    int
-	col    int
-	parent *Cell
-}
-
-func (cell *Cell) GetRow() int {
-	return cell.row
-}
-
-func (cell *Cell) GetCol() int {
-	return cell.col
-}
-
-func (cell *Cell) GetParent() *Cell {
-	return cell.parent
+	Row    int
+	Col    int
+	Parent *Cell
 }
 
 func NewCell(r, c int, prt *Cell) *Cell {
 	return &Cell{
-		row:    r,
-		col:    c,
-		parent: prt,
+		Row:    r,
+		Col:    c,
+		Parent: prt,
 	}
 }
 
 func (cell *Cell) GetChild() *Cell {
 	return &Cell{
-		row: (cell.row << 1) - cell.parent.row,
-		col: (cell.col << 1) - cell.parent.col,
+		Row: (cell.Row << 1) - cell.Parent.Row,
+		Col: (cell.Col << 1) - cell.Parent.Col,
 	}
 }

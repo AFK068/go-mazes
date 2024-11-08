@@ -19,12 +19,12 @@ const (
 )
 
 type Maze struct {
-	rows          int
-	cols          int
-	grid          Grid
-	generateSteps []Grid
-	start         *Cell
-	end           *Cell
+	Rows          int
+	Cols          int
+	Grid          Grid
+	GenerateSteps []Grid
+	Start         *Cell
+	End           *Cell
 }
 
 func NewMaze(r, w int) *Maze {
@@ -46,89 +46,65 @@ func NewMaze(r, w int) *Maze {
 			tempRow[j] = Wall
 		}
 
-		mz.grid[i] = tempRow
+		mz.Grid[i] = tempRow
 	}
 
 	return mz
 }
 
-func (mz *Maze) GetRows() int {
-	return mz.rows
-}
-
-func (mz *Maze) GetCols() int {
-	return mz.cols
-}
-
-func (mz *Maze) GetStart() *Cell {
-	return mz.start
-}
-
-func (mz *Maze) GetEnd() *Cell {
-	return mz.end
-}
-
-func (mz *Maze) GetGrid() Grid {
-	return mz.grid
-}
-
-func (mz *Maze) GetMazeGenerationStep() *[]Grid {
-	return &mz.generateSteps
-}
-
 func (mz *Maze) GetIndex(cell *Cell) int {
-	return cell.GetRow()*mz.cols + cell.GetCol()
+	return cell.Row*mz.Cols + cell.Col
 }
 
 func (mz *Maze) IsWall(r, c int) bool {
-	return mz.IsValid(r, c) && mz.grid[r][c] == Wall
+	return mz.IsValid(r, c) && mz.Grid[r][c] == Wall
 }
 
 func (mz *Maze) IsValid(r, c int) bool {
-	return r >= 0 && r < mz.rows && c >= 0 && c < mz.cols
+	return r >= 0 && r < mz.Rows && c >= 0 && c < mz.Cols
 }
 
 func (mz *Maze) IsPathable(r, c int) bool {
-	return mz.IsValid(r, c) && mz.grid[r][c] != Wall
+	return mz.IsValid(r, c) && mz.Grid[r][c] != Wall
 }
 
 func (mz *Maze) SetGrid(r, w int, val rune) {
 	if mz.IsValid(r, w) {
-		mz.grid[r][w] = val
+		mz.Grid[r][w] = val
 	}
 }
 
 func (mz *Maze) CopyGrid() Grid {
-	copyGrid := make([][]rune, len(mz.GetGrid()))
-	for i := 0; i < len(mz.GetGrid()); i++ {
-		copyGrid[i] = make([]rune, len(mz.GetGrid()[i]))
-		copy(copyGrid[i], mz.GetGrid()[i])
+	copyGrid := make([][]rune, len(mz.Grid))
+	for i := 0; i < len(mz.Grid); i++ {
+		copyGrid[i] = make([]rune, len(mz.Grid[i]))
+		copy(copyGrid[i], mz.Grid[i])
 	}
 
 	return copyGrid
 }
 
 func (mz *Maze) SetStart(cell *Cell) {
-	r, w := cell.GetRow(), cell.GetCol()
+	r, w := cell.Row, cell.Col
 	if mz.IsValid(r, w) {
-		if mz.start != nil {
-			mz.grid[mz.start.row][mz.start.col] = Floor
+		if mz.Start != nil {
+			mz.Grid[mz.Start.Row][mz.Start.Col] = Floor
 		}
 
-		mz.start = cell
-		mz.grid[r][w] = Start
+		mz.Start = cell
+		mz.Grid[r][w] = Start
 	}
 }
 
 func (mz *Maze) SetEnd(cell *Cell) {
-	r, w := cell.GetRow(), cell.GetCol()
+	r, w := cell.Row, cell.Col
 	if mz.IsValid(r, w) {
-		if mz.end != nil {
-			mz.grid[mz.end.row][mz.end.col] = Floor
+		if mz.End != nil {
+			mz.Grid[mz.End.Row][mz.End.Col] = Floor
 		}
 
-		mz.end = cell
-		mz.grid[r][w] = End
+		mz.End = cell
+		mz.Grid[r][w] = End
 	}
 }
 
@@ -143,8 +119,8 @@ func (mz *Maze) GetNeighbours(cell *Cell, cellType rune) []*Cell {
 	}
 
 	for _, offset := range offsets {
-		row := cell.row + offset[0]
-		col := cell.col + offset[1]
+		row := cell.Row + offset[0]
+		col := cell.Col + offset[1]
 
 		if ((cellType == Floor) && mz.IsPathable(row, col)) || ((cellType == Wall) && mz.IsWall(row, col)) {
 			neighbours = append(neighbours, NewCell(row, col, cell))
@@ -154,10 +130,34 @@ func (mz *Maze) GetNeighbours(cell *Cell, cellType rune) []*Cell {
 	return neighbours
 }
 
+// Сheck if there are possible moves from the current position.
+func (mz *Maze) NextMovePossible(cell *Cell, visited map[int]bool) bool {
+	neighbors := mz.GetNeighbours(cell, Floor)
+	for _, neighbor := range neighbors {
+		if !visited[mz.GetIndex(neighbor)] {
+			return true
+		}
+	}
+
+	return false
+}
+
+// Take an unvisited neighbor.
+func (mz *Maze) NextFesableMove(cell *Cell, visited map[int]bool) *Cell {
+	neighbors := mz.GetNeighbours(cell, Floor)
+	for _, neighbor := range neighbors {
+		if !visited[mz.GetIndex(neighbor)] {
+			return neighbor
+		}
+	}
+
+	return nil
+}
+
 func (mz *Maze) GenerateMoney() {
-	for i := 0; i < mz.GetRows(); i++ {
-		for j := 0; j < mz.GetCols(); j++ {
-			if mz.GetGrid()[i][j] == Floor {
+	for i := 0; i < mz.Rows; i++ {
+		for j := 0; j < mz.Cols; j++ {
+			if mz.Grid[i][j] == Floor {
 				randBInt, _ := rand.Int(rand.Reader, big.NewInt(10))
 				number := randBInt.Int64()
 
@@ -167,4 +167,6 @@ func (mz *Maze) GenerateMoney() {
 			}
 		}
 	}
+
+	mz.GenerateSteps = append(mz.GenerateSteps, mz.CopyGrid())
 }

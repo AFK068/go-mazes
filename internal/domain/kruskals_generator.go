@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"github.com/es-debug/backend-academy-2024-go-template/pkg/union"
 	"golang.org/x/exp/rand"
 )
 
@@ -9,14 +10,14 @@ type KruskalGenerator struct{}
 func (g *KruskalGenerator) Generate(maze *Maze, startCell, endCell *Cell) *Maze {
 	nodes := make([]*Cell, 0)
 
-	for i := 0; i < maze.GetRows(); i += 2 {
-		for j := 0; j < maze.GetCols(); j += 2 {
+	for i := 0; i < maze.Rows; i += 2 {
+		for j := 0; j < maze.Cols; j += 2 {
 			nodes = append(nodes, NewCell(i, j, nil))
 		}
 	}
 
-	nodeRows := maze.GetRows() / 2
-	nodeCols := maze.GetCols() / 2
+	nodeRows := maze.Rows / 2
+	nodeCols := maze.Cols / 2
 	edges := make([]*Edge, 0)
 
 	for r := 0; r < nodeRows; r++ {
@@ -25,19 +26,19 @@ func (g *KruskalGenerator) Generate(maze *Maze, startCell, endCell *Cell) *Maze 
 			rightCell := (c + 1) + (r * nodeCols)
 			downCell := c + ((r + 1) * nodeCols)
 
-			if c < nodeCols-1 && nodes[thisCell].GetCol() != maze.GetCols()-1 {
+			if c < nodeCols-1 && nodes[thisCell].Col != maze.Cols-1 {
 				edges = append(edges, NewEdge(thisCell, rightCell))
 			}
 
-			if r < nodeRows-1 && nodes[thisCell].GetRow() != maze.GetRows()-1 {
+			if r < nodeRows-1 && nodes[thisCell].Row != maze.Rows-1 {
 				edges = append(edges, NewEdge(thisCell, downCell))
 			}
 		}
 	}
 
-	sets := make([]*UnionFindSet, 0)
+	sets := make([]*union.FindSet, 0)
 	for i := 0; i < len(nodes); i++ {
-		sets = append(sets, NewUnionFindSet(i))
+		sets = append(sets, union.NewUnionFindSet(i))
 	}
 
 	totalEdges := 0
@@ -46,25 +47,25 @@ func (g *KruskalGenerator) Generate(maze *Maze, startCell, endCell *Cell) *Maze 
 		nextEdge := edges[randIndex]
 		edges = append(edges[:randIndex], edges[randIndex+1:]...)
 
-		x := fing(sets, nextEdge.GetFirst())
-		y := fing(sets, nextEdge.GetSecond())
+		x := union.Find(sets, nextEdge.First)
+		y := union.Find(sets, nextEdge.Second)
 
 		if x != y {
-			firstRow := nodes[nextEdge.GetFirst()].GetRow()
-			firstCol := nodes[nextEdge.GetFirst()].GetCol()
-			secondRow := nodes[nextEdge.GetSecond()].GetRow()
-			secondCol := nodes[nextEdge.GetSecond()].GetCol()
+			firstRow := nodes[nextEdge.First].Row
+			firstCol := nodes[nextEdge.First].Col
+			secondRow := nodes[nextEdge.Second].Row
+			secondCol := nodes[nextEdge.Second].Col
 			midRow := (firstRow + secondRow) / 2
 			midCol := (firstCol + secondCol) / 2
 
 			maze.SetGrid(firstRow, firstCol, End)
 			maze.SetGrid(secondRow, secondCol, End)
 			maze.SetGrid(midRow, midCol, End)
-			maze.generateSteps = append(maze.generateSteps, maze.CopyGrid()) // Generate animation
+			maze.GenerateSteps = append(maze.GenerateSteps, maze.CopyGrid()) // Generate animation
 			maze.SetGrid(firstRow, firstCol, Floor)
 			maze.SetGrid(secondRow, secondCol, Floor)
 			maze.SetGrid(midRow, midCol, Floor)
-			join(sets, x, y)
+			union.Join(sets, x, y)
 
 			totalEdges++
 		}
@@ -72,32 +73,7 @@ func (g *KruskalGenerator) Generate(maze *Maze, startCell, endCell *Cell) *Maze 
 
 	maze.SetStart(startCell)
 	maze.SetEnd(endCell)
-	maze.generateSteps = append(maze.generateSteps, maze.CopyGrid()) // Generate animation
+	maze.GenerateSteps = append(maze.GenerateSteps, maze.CopyGrid()) // Generate animation
 
 	return maze
-}
-
-func fing(sets []*UnionFindSet, x int) int {
-	if sets[x].parent != x {
-		sets[x].parent = fing(sets, sets[x].parent)
-	}
-
-	return sets[x].parent
-}
-
-func join(sets []*UnionFindSet, x, y int) {
-	rootX := fing(sets, x)
-	rootY := fing(sets, y)
-
-	if rootX != rootY {
-		switch {
-		case sets[rootX].rank > sets[rootY].rank:
-			sets[rootY].parent = rootX
-		case sets[rootX].rank < sets[rootY].rank:
-			sets[rootX].parent = rootY
-		default:
-			sets[rootY].parent = rootX
-			sets[rootX].rank++
-		}
-	}
 }

@@ -131,8 +131,8 @@ func TestBFSSolver_failure(t *testing.T) {
 	expectedCoins := 1
 	assert.Equal(t, expectedCoins, coinsCollected, "Expected to collect %d coins, but collected %d", expectedCoins, coinsCollected)
 
-	assert.Equal(t, domain.Start, maze.GetGrid()[0][0], "Expected start cell to be %c, but got %c", domain.Start, maze.GetGrid()[0][0])
-	assert.Equal(t, domain.End, maze.GetGrid()[2][0], "Expected end cell to be %c, but got %c", domain.End, maze.GetGrid()[2][0])
+	assert.Equal(t, domain.Start, maze.Grid[0][0], "Expected start cell to be %c, but got %c", domain.Start, maze.Grid[0][0])
+	assert.Equal(t, domain.End, maze.Grid[2][0], "Expected end cell to be %c, but got %c", domain.End, maze.Grid[2][0])
 }
 
 func TestDFSSolver_success(t *testing.T) {
@@ -253,8 +253,8 @@ func TestDFSSolver_failure(t *testing.T) {
 	expectedCoins := 1
 	assert.Equal(t, expectedCoins, coinsCollected, "Expected to collect %d coins, but collected %d", expectedCoins, coinsCollected)
 
-	assert.Equal(t, domain.Start, maze.GetGrid()[0][0], "Expected start cell to be %c, but got %c", domain.Start, maze.GetGrid()[0][0])
-	assert.Equal(t, domain.End, maze.GetGrid()[2][0], "Expected end cell to be %c, but got %c", domain.End, maze.GetGrid()[2][0])
+	assert.Equal(t, domain.Start, maze.Grid[0][0], "Expected start cell to be %c, but got %c", domain.Start, maze.Grid[0][0])
+	assert.Equal(t, domain.End, maze.Grid[2][0], "Expected end cell to be %c, but got %c", domain.End, maze.Grid[2][0])
 }
 
 func TestWallFollowerSolver_success(t *testing.T) {
@@ -293,8 +293,8 @@ func TestWallFollowerSolver_success(t *testing.T) {
 	expectedCoins := 2
 	assert.Equal(t, expectedCoins, coinsCollected, "Expected to collect %d coins, but collected %d", expectedCoins, coinsCollected)
 
-	assert.Equal(t, domain.Start, maze.GetGrid()[0][0], "Expected start cell to be %c, but got %c", domain.Start, maze.GetGrid()[0][0])
-	assert.Equal(t, domain.End, maze.GetGrid()[2][0], "Expected end cell to be %c, but got %c", domain.End, maze.GetGrid()[2][0])
+	assert.Equal(t, domain.Start, maze.Grid[0][0], "Expected start cell to be %c, but got %c", domain.Start, maze.Grid[0][0])
+	assert.Equal(t, domain.End, maze.Grid[2][0], "Expected end cell to be %c, but got %c", domain.End, maze.Grid[2][0])
 }
 
 func TestWallFollowerSolver_failure(t *testing.T) {
@@ -416,11 +416,5 @@ func TestWallFollowerSolver_failure(t *testing.T) {
 		assert.Contains(t, tc.expectedCoins, coinsCollected,
 			"Expected to collect one of %v coins, but collected %d",
 			tc.expectedCoins, coinsCollected)
-
-		if tc.expectedCoins[0] == 0 {
-			assert.Contains(t, buf.String(),
-				"Exceeded maximum steps, possible infinite loop.",
-				"Expected to see 'Exceeded maximum steps, possible infinite loop.' in output")
-		}
 	}
 }

@@ -25,11 +25,11 @@ func (g *PrimGenerator) Generate(maze *Maze, startCell, endCell *Cell) *Maze {
 		frontier = append(frontier[:randIndex], frontier[randIndex+1:]...)
 
 		parent = child.GetChild()
-		row := parent.GetRow()
-		col := parent.GetCol()
+		row := parent.Row
+		col := parent.Col
 
-		if maze.IsValid(row, col) && maze.GetGrid()[row][col] == Wall {
-			maze.SetGrid(child.GetRow(), child.GetCol(), Floor)
+		if maze.IsValid(row, col) && maze.Grid[row][col] == Wall {
+			maze.SetGrid(child.Row, child.Col, Floor)
 			maze.SetGrid(row, col, End)
 
 			neighbors := maze.GetNeighbours(parent, Wall)
@@ -38,13 +38,13 @@ func (g *PrimGenerator) Generate(maze *Maze, startCell, endCell *Cell) *Maze {
 			maze.SetGrid(row, col, Floor)
 		}
 
-		maze.generateSteps = append(maze.generateSteps, maze.CopyGrid()) // Generate animation
+		maze.GenerateSteps = append(maze.GenerateSteps, maze.CopyGrid()) // Generate animation
 	}
 
 	// Set start and end
 	maze.SetStart(startCell)
 	maze.SetEnd(endCell)
-	maze.generateSteps = append(maze.generateSteps, maze.CopyGrid())
+	maze.GenerateSteps = append(maze.GenerateSteps, maze.CopyGrid())
 
 	return maze
 }

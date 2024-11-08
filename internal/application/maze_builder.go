@@ -17,9 +17,6 @@ func InitializeMaze() {
 		return
 	}
 
-	width -= width % 2
-	height -= height % 2
-
 	err = GetConsoleSize(width, height)
 	if err != nil {
 		slog.Error("getting console size", slog.String("error", err.Error()))
@@ -46,14 +43,13 @@ func InitializeMaze() {
 
 	slog.Info(
 		"generating maze", slog.Int("height", height),
-		slog.Int("width", width), slog.Int("start_x", startCell.GetRow()),
-		slog.Int("start_y", startCell.GetCol()), slog.Int("end_x", endCell.GetRow()),
-		slog.Int("end_y", endCell.GetCol()), slog.String("generator", fmt.Sprintf("%T", generator)),
+		slog.Int("width", width), slog.Int("start_x", startCell.Row),
+		slog.Int("start_y", startCell.Col), slog.Int("end_x", endCell.Row),
+		slog.Int("end_y", endCell.Col), slog.String("generator", fmt.Sprintf("%T", generator)),
 	)
 
-	generateMaze := domain.NewGenerateMaze(generator)
-	maze := generateMaze.GenerateMaze(height, width, startCell, endCell)
-	infrastructure.RenderMazeWithGridStepsWithDelay(maze.GetMazeGenerationStep())
+	maze := buildMaze(generator, height, width, startCell, endCell)
+	infrastructure.RenderMazeWithGridStepsWithDelay(&maze.GenerateSteps)
 
 	solver, err := selectSolver()
 	if err != nil {
@@ -75,6 +71,14 @@ func InitializeMaze() {
 		slog.Info("no path found in maze. Money collected", slog.Int("money", money))
 		fmt.Println("No path found. Money collected:", money)
 	}
+}
+
+func buildMaze(generator domain.Generator, rowNums, colNums int, start, end *domain.Cell) *domain.Maze {
+	maze := domain.NewMaze(rowNums, colNums)
+	generatedMaze := generator.Generate(maze, start, end)
+	generatedMaze.GenerateMoney()
+
+	return generatedMaze
 }
 
 func initializeStartAndEndCells(width, height int) (startCell, endCell *domain.Cell, err error) {

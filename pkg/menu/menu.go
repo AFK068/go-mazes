@@ -1,4 +1,4 @@
-package pkg
+package menu
 
 import (
 	"fmt"
@@ -21,10 +21,10 @@ var keys = map[byte]bool{
 type Menu struct {
 	Prompt         string
 	CursorPosition int
-	MenuItems      []*MenuItem
+	MenuItems      []*Item
 }
 
-type MenuItem struct {
+type Item struct {
 	Text    string
 	SubMenu *Menu
 }
@@ -32,12 +32,12 @@ type MenuItem struct {
 func NewMenu(prompt string) *Menu {
 	return &Menu{
 		Prompt:    prompt,
-		MenuItems: make([]*MenuItem, 0),
+		MenuItems: make([]*Item, 0),
 	}
 }
 
 func (m *Menu) AddItem(option string) *Menu {
-	menuItem := &MenuItem{
+	menuItem := &Item{
 		Text: option,
 	}
 
